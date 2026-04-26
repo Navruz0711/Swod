@@ -8,7 +8,9 @@ const leadForm = document.getElementById("lead-form");
 const leadError = document.getElementById("lead-error");
 const phoneInput = document.getElementById("phone");
 const leadSubmitButton = leadForm.querySelector(".lead-form__submit");
-const formspreeEndpoint = leadForm.dataset.formspreeEndpoint || "";
+const emailjsPublicKey = leadForm.dataset.emailjsPublicKey || "";
+const emailjsServiceId = leadForm.dataset.emailjsServiceId || "";
+const emailjsTemplateId = leadForm.dataset.emailjsTemplateId || "";
 const telegramBotToken = leadForm.dataset.telegramBotToken || "";
 const telegramChatId = leadForm.dataset.telegramChatId || "";
 const thankYouUrl = "./spasibo.html";
@@ -60,11 +62,11 @@ function formatPhone(value) {
   return result;
 }
 
-function isConfiguredFormspreeEndpoint(endpoint) {
-  if (!/^https:\/\/formspree\.io\/f\/[a-z0-9]+$/i.test(endpoint)) {
+function isConfiguredEmailjs(publicKey, serviceId, templateId) {
+  if (!publicKey || !serviceId || !templateId) {
     return false;
   }
-  return !endpoint.includes("REPLACE_WITH_YOUR_FORM_ID");
+  return ![publicKey, serviceId, templateId].some((value) => value.includes("REPLACE_WITH_YOUR_"));
 }
 
 function isConfiguredTelegram(token, chatId) {
@@ -77,18 +79,21 @@ function isConfiguredTelegram(token, chatId) {
   return true;
 }
 
-async function sendLeadToFormspree(formData) {
-  const response = await fetch(formspreeEndpoint, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
-    body: formData,
+async function sendLeadToEmailjs({ name, phone, email }) {
+  if (!window.emailjs || typeof window.emailjs.send !== "function") {
+    throw new Error("EmailJS is not loaded");
+  }
+
+  window.emailjs.init({
+    publicKey: emailjsPublicKey,
   });
 
-  if (!response.ok) {
-    throw new Error("Formspree send failed");
-  }
+  await window.emailjs.send(emailjsServiceId, emailjsTemplateId, {
+    name,
+    phone,
+    email,
+    subject: "Новая заявка с сайта ZEMLEPRO",
+  });
 }
 
 async function sendLeadToTelegram({ name, phone, email }) {
@@ -251,18 +256,16 @@ leadForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  formData.set("phone", normalizedPhone);
-
   leadSubmitButton.disabled = true;
   leadSubmitButton.textContent = "Отправка...";
 
   try {
-    const hasEndpoint = isConfiguredFormspreeEndpoint(formspreeEndpoint);
+    const hasEmailjs = isConfiguredEmailjs(emailjsPublicKey, emailjsServiceId, emailjsTemplateId);
     const hasTelegram = isConfiguredTelegram(telegramBotToken, telegramChatId);
     const sendTasks = [];
 
-    if (hasEndpoint) {
-      sendTasks.push(sendLeadToFormspree(formData));
+    if (hasEmailjs) {
+      sendTasks.push(sendLeadToEmailjs({ name, phone: normalizedPhone, email }));
     }
     if (hasTelegram) {
       sendTasks.push(sendLeadToTelegram({ name, phone: normalizedPhone, email }));
