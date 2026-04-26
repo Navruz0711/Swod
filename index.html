@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZEMLEPRO - Лендинг</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page" id="top">
+      <section class="frame" id="frame-1">
+        <img src="./1.jpg" alt="Землепро - главный экран" loading="eager" />
+        <button class="cta-hotspot" type="button" data-open-form data-cta="hero">
+          Заказать звонок
+        </button>
+        <a class="phone-hotspot" href="tel:+79850240724" aria-label="Позвонить +7 985 024 07 24"></a>
+      </section>
+      <section class="frame" id="frame-2">
+        <img src="./2.jpg" alt="Описание преимуществ ремонта" loading="lazy" />
+        <button class="cta-hotspot cta-hotspot--frame2-wide" type="button" data-open-form data-cta="middle-wide" aria-label="Заказать звонок в среднем блоке">
+          Заказать звонок
+        </button>
+      </section>
+      <section class="frame" id="frame-3">
+        <img src="./3.jpg" alt="Пример стоимости ремонта" loading="lazy" />
+      </section>
+      <section class="frame" id="frame-4">
+        <img src="./4.jpg" alt="Совместный проект Землепро и Лемана Про" loading="lazy" />
+      </section>
+      <section class="frame" id="frame-5">
+        <img src="./5.jpg" alt="Гарантия двойной выгоды" loading="lazy" />
+      </section>
+      <section class="frame" id="frame-6">
+        <img src="./6.jpg" alt="Ландшафтный дизайн и ремонт" loading="lazy" />
+        <a class="phone-hotspot phone-hotspot-bottom" href="tel:+79850240724" aria-label="Позвонить +7 985 024 07 24"></a>
+      </section>
+      <section class="frame" id="frame-7">
+        <img src="./7.jpg" alt="Кнопка заказа ремонта и реквизиты" loading="lazy" />
+        <button class="cta-hotspot" type="button" data-open-form data-cta="footer">
+          Заказать звонок
+        </button>
+      </section>
+    </main>
+
+    <nav class="quick-nav" aria-label="Быстрый переход по блокам">
+      <button type="button" data-target="frame-1" aria-label="Перейти к блоку 1"></button>
+      <button type="button" data-target="frame-2" aria-label="Перейти к блоку 2"></button>
+      <button type="button" data-target="frame-3" aria-label="Перейти к блоку 3"></button>
+      <button type="button" data-target="frame-4" aria-label="Перейти к блоку 4"></button>
+      <button type="button" data-target="frame-5" aria-label="Перейти к блоку 5"></button>
+      <button type="button" data-target="frame-6" aria-label="Перейти к блоку 6"></button>
+      <button type="button" data-target="frame-7" aria-label="Перейти к блоку 7"></button>
+    </nav>
+
+    <button class="to-top" type="button" aria-label="Наверх">↑</button>
+
+    <div class="modal" id="lead-modal" aria-hidden="true">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="lead-title">
+        <button class="modal__close" type="button" data-close-modal aria-label="Закрыть форму">
+          ×
+        </button>
+        <h2 class="modal__title" id="lead-title">Заказать звонок</h2>
+        <form
+          class="lead-form"
+          id="lead-form"
+          novalidate
+          data-formspree-endpoint="https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID"
+          data-telegram-bot-token="REPLACE_WITH_YOUR_BOT_TOKEN"
+          data-telegram-chat-id="REPLACE_WITH_YOUR_CHAT_ID"
+        >
+          <input type="hidden" name="_subject" value="Новая заявка с сайта ZEMLEPRO" />
+          <label class="lead-form__label" for="name">Имя</label>
+          <input class="lead-form__input" id="name" name="name" type="text" required minlength="2" />
+
+          <label class="lead-form__label" for="phone">Телефон</label>
+          <input
+            class="lead-form__input"
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="+7 (___) ___-__-__"
+            required
+            pattern="^\+7[\s(]*\d{3}[\s)]*\d{3}[-\s]*\d{2}[-\s]*\d{2}$"
+          />
+
+          <label class="lead-form__label" for="email">Email</label>
+          <input class="lead-form__input" id="email" name="email" type="email" required />
+
+          <p class="lead-form__error" id="lead-error" aria-live="polite"></p>
+          <button class="lead-form__submit" type="submit">Отправить</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
